@@ -1,0 +1,132 @@
+.pagination {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 30px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.pagination.top {
+    margin: 20px 0 30px 0;
+}
+
+.pagination.bottom {
+    margin: 30px 0 20px 0;
+}
+
+.info {
+    text-align: center;
+    font-size: 14px;
+    color: #6c757d;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.pageInfo {
+    font-weight: 600;
+    color: #495057;
+}
+
+.results {
+    color: #868e96;
+}
+
+.loadingIndicator {
+    color: #007bff;
+    font-weight: 500;
+    animation: pulse 1.5s infinite;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.pageBtn, .arrowBtn {
+    padding: 8px 14px;
+    border: 1px solid #dee2e6;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    min-width: 40px;
+    text-align: center;
+    font-weight: 500;
+    color: #495057;
+    position: relative;
+}
+
+.pageBtn:hover:not(.active):not(:disabled),
+.arrowBtn:hover:not(:disabled) {
+    background: #e9ecef;
+    border-color: #adb5bd;
+    transform: translateY(-1px);
+}
+
+.pageBtn.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+    cursor: default; /* Убираем курсор-указатель на активной странице */
+}
+
+/* Особые стили для активной кнопки при загрузке */
+.pageBtn.active:disabled {
+    background: #0056b3;
+    opacity: 0.9;
+}
+
+.pageBtn:disabled:not(.active),
+.arrowBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.pageBtn:disabled:hover:not(.active),
+.arrowBtn:disabled:hover {
+    background: white;
+    border-color: #dee2e6;
+}
+
+.dots {
+    padding: 0 8px;
+    color: #adb5bd;
+    font-size: 14px;
+}
+
+.arrowBtn {
+    font-size: 16px;
+    line-height: 1;
+    padding: 8px 16px;
+}
+
+.loadingDot {
+    display: inline-block;
+    animation: loadingPulse 1s infinite;
+    margin-left: 2px;
+}
+
+@keyframes loadingPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
