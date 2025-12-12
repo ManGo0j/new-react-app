@@ -1,6 +1,49 @@
-.main{
-    display: flex ;
-    width: 100%;
-    flex-direction: column;
-    gap: 30px;
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.main {
+    padding: 20px 0;
+}
+
+.noNews {
+    text-align: center;
+    padding: 60px 20px;
+    font-size: 18px;
+    color: #666;
+    background: #f9f9f9;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.error {
+    text-align: center;
+    padding: 40px 20px;
+    background: #fff3f3;
+    border: 1px solid #ffcccc;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.error p {
+    color: #d32f2f;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.retryBtn {
+    padding: 10px 24px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.retryBtn:hover {
+    background: #0056b3;
 }
