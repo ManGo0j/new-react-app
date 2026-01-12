@@ -4,6 +4,7 @@ import NewsBanner from "../../components/NewsBanner/NewsBanner";
 import NewsList from "../../components/NewsList/NewsList";
 import Skeleton from "../../components/Skeleton/Skeleton";
 import Pagination from "../../components/Pagination/Pagination";
+import CategoryFilter from "../../components/CategoryFilter/CategoryFilter";
 import styles from "./style.module.css";
 
 const Main = () => {
@@ -13,16 +14,17 @@ const Main = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalResults, setTotalResults] = useState(0);
     const [isChangingPage, setIsChangingPage] = useState(false);
+    const [activeCategory, setActiveCategory] = useState("all");
     const itemsPerPage = 10;
 
-    const fetchNews = async (page = 1) => {
-        console.log(`Начинаю загрузку новостей, страница ${page}...`);
+    const fetchNews = async (page = 1, category = activeCategory) => {
+        console.log(`Начинаю загрузку новостей, страница ${page}, категория ${category}...`);
         setLoading(true);
         setError(null);
         setIsChangingPage(true);
 
         try {
-            const response = await getNews(page, itemsPerPage);
+            const response = await getNews(page, itemsPerPage, category);
             console.log("Ответ от API:", response);
 
             if (response && response.status === "ok") {
@@ -34,13 +36,13 @@ const Main = () => {
                 setCurrentPage(page);
                 
                 if (response.articles.length === 0) {
-                    setError("Новости не найдены");
+                    setError(`Новости в категории не найдены`);
                 }
             } else {
                 console.error("Некорректный ответ API:", response);
                 setError(response?.message || "Некорректный ответ от сервера");
                 setNews([]);
-                setTotalResults(response?.totalResults || 0); // Сохраняем totalResults даже при ошибке
+                setTotalResults(response?.totalResults || 0);
             }
         } catch (e) {
             console.error("Ошибка при запросе:", e);
@@ -56,7 +58,7 @@ const Main = () => {
     };
 
     useEffect(() => {
-        fetchNews(1);
+        fetchNews(1, activeCategory);
     }, []);
 
     const handlePageChange = (page) => {
@@ -66,7 +68,16 @@ const Main = () => {
             page !== currentPage && // Не позволяем выбрать текущую страницу
             !isChangingPage // Не позволяем кликать во время смены страницы
         ) {
-            fetchNews(page);
+            fetchNews(page, activeCategory);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
+
+    const handleCategoryChange = (category) => {
+        if (category !== activeCategory && !isChangingPage) {
+            setActiveCategory(category);
+            setCurrentPage(1); // Сбрасываем на первую страницу при смене категории
+            fetchNews(1, category);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     };
@@ -82,12 +93,19 @@ const Main = () => {
         totalResults,
         totalPages,
         showPagination,
+        activeCategory,
         isChangingPage
     });
 
     return (
         <div className={styles.container}>
             <main className={styles.main}>
+                {/* Фильтр по категориям */}
+                <CategoryFilter 
+                    activeCategory={activeCategory}
+                    onCategoryChange={handleCategoryChange}
+                />
+
                 {/* Баннер */}
                 {!loading && news.length > 0 ? (
                     <NewsBanner
@@ -103,7 +121,7 @@ const Main = () => {
                     <Skeleton type="banner" count={1} />
                 )}
 
-                {/* Пагинация сверху - ПОКАЗЫВАЕМ ВСЕГДА, если есть более 1 страницы */}
+                {/* Пагинация сверху */}
                 {showPagination && (
                     <Pagination
                         currentPage={currentPage}
@@ -113,7 +131,7 @@ const Main = () => {
                         position="top"
                         isChangingPage={isChangingPage}
                         isLoading={loading}
-                        showAlways={true} // Пагинация всегда видна
+                        showAlways={true}
                     />
                 )}
 
@@ -131,13 +149,21 @@ const Main = () => {
                     />
                 ) : !loading && news.length === 0 ? (
                     <div className={styles.noNews}>
-                        {error || "Новости не найдены"}
+                        <p className={styles.noNewsTitle}>
+                            {activeCategory === "all" 
+                                ? "Новости не найдены" 
+                                : `Новости в категории не найдены`
+                            }
+                        </p>
+                        <p className={styles.noNewsSubtitle}>
+                            Попробуйте выбрать другую категорию
+                        </p>
                     </div>
                 ) : (
                     <Skeleton type="item" count={5} />
                 )}
 
-                {/* Пагинация снизу - ПОКАЗЫВАЕМ ВСЕГДА, если есть более 1 страницы */}
+                {/* Пагинация снизу */}
                 {showPagination && (
                     <Pagination
                         currentPage={currentPage}
@@ -147,7 +173,7 @@ const Main = () => {
                         position="bottom"
                         isChangingPage={isChangingPage}
                         isLoading={loading}
-                        showAlways={true} // Пагинация всегда видна
+                        showAlways={true}
                     />
                 )}
 
@@ -156,7 +182,7 @@ const Main = () => {
                     <div className={styles.error}>
                         <p>{error}</p>
                         <button 
-                            onClick={() => fetchNews(1)}
+                            onClick={() => fetchNews(1, activeCategory)}
                             className={styles.retryBtn}
                             disabled={loading}
                         >

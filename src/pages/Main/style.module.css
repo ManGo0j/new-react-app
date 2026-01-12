@@ -6,44 +6,126 @@
 
 .main {
     padding: 20px 0;
+    min-height: 100vh;
 }
 
+/* Фиксированные отступы для сохранения layout */
+.main > *:nth-child(2) { /* Пагинация сверху */
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.main > *:nth-last-child(2) { /* Пагинация снизу */
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+/* Стили для пустого состояния */
 .noNews {
     text-align: center;
-    padding: 60px 20px;
+    padding: 80px 20px;
     font-size: 18px;
     color: #666;
     background: #f9f9f9;
-    border-radius: 8px;
-    margin: 20px 0;
+    border-radius: 12px;
+    margin: 30px 0;
+    border: 1px solid #e0e0e0;
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.noNewsTitle {
+    color: #495057;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.noNewsSubtitle {
+    color: #868e96;
+    font-size: 16px;
+    max-width: 400px;
+    line-height: 1.5;
 }
 
 .error {
     text-align: center;
-    padding: 40px 20px;
+    padding: 50px 20px;
     background: #fff3f3;
     border: 1px solid #ffcccc;
-    border-radius: 8px;
-    margin: 20px 0;
+    border-radius: 12px;
+    margin: 40px 0;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .error p {
     color: #d32f2f;
     margin-bottom: 20px;
     font-size: 16px;
+    font-weight: 500;
+    max-width: 600px;
+    line-height: 1.5;
 }
 
 .retryBtn {
-    padding: 10px 24px;
+    padding: 12px 28px;
     background: #007bff;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 14px;
-    transition: background 0.2s;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.2s;
+    min-width: 180px;
 }
 
-.retryBtn:hover {
+.retryBtn:hover:not(:disabled) {
     background: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.25);
+}
+
+.retryBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .main {
+        padding: 15px 0;
+    }
+    
+    .noNews {
+        padding: 60px 20px;
+        margin: 20px 0;
+    }
+    
+    .noNewsTitle {
+        font-size: 18px;
+    }
+    
+    .noNewsSubtitle {
+        font-size: 14px;
+    }
+    
+    .error {
+        padding: 40px 15px;
+    }
+    
+    .error p {
+        font-size: 15px;
+    }
 }
